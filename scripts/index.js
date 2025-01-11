@@ -11,7 +11,6 @@ function createCard(cardDetail, cardDelete) {
   cardTitle.textContent = cardDetail.name;
 
   deleteButton.addEventListener("click", () => cardDelete(cardElement));
-
   return cardElement;
 }
 
