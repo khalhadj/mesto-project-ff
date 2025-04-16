@@ -32,3 +32,29 @@ function renderCards() {
 }
 
 renderCards()
+
+// Открываем попап
+
+const allPopups = document.querySelector('.popup')
+const editPopup = document.querySelector('.popup_type_edit')
+const editButton = document.querySelector('.profile__edit-button')
+const addButton = document.querySelector('.profile__add-button')
+const closeButton = document.querySelector('.popup__close')
+
+editButton.addEventListener('click', () => {
+	editPopup.style.display = 'flex'
+})
+
+addButton.addEventListener('click', () => {
+	editPopup.style.display = 'flex'
+})
+
+// Закрываем попап
+
+function closePopup(popup) {
+	popup.style.display = 'none'
+}
+
+closeButton.addEventListener('click', () => {
+	closePopup(allPopups)
+})
