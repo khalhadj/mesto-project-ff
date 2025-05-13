@@ -1,41 +1,58 @@
-const allPopups = document.querySelectorAll('.popup')
-const editPopup = document.querySelector('.popup_type_edit')
-const editButton = document.querySelector('.profile__edit-button')
-const addButton = document.querySelector('.profile__add-button')
-const closeButton = document.querySelector('.popup__close')
-
-editButton.addEventListener('click', function () {
-	editPopup.style.display = 'flex'
-})
-
-addButton.addEventListener('click', function () {
-	editPopup.style.display = 'flex'
-})
-
-// Закрываем попап
-
-function closePopup(popup) {
-	popup.style.display = 'none'
+function openPopup(popup) {
+	popup.classList.add('popup_is-opened')
 }
 
-closeButton.addEventListener('click', function () {
-	const popup = closeButton.closest('.popup')
-	closePopup(popup)
-})
+function closePopup(popup) {
+	popup.classList.remove('popup_is-opened')
+}
 
-allPopups.forEach(function (popup) {
-	popup.addEventListener('click', function (event) {
-		if (event.target === popup) {
+function initPopups() {
+	const allPopups = document.querySelectorAll('.popup')
+	const editPopup = document.querySelector('.popup_type_edit')
+	const editButton = document.querySelector('.profile__edit-button')
+	const addButton = document.querySelector('.profile__add-button')
+	const newCard = document.querySelector('.popup_type_new-card')
+	const closeButtons = document.querySelectorAll('.popup__close')
+	const profileName = document.querySelector('.profile__title')
+	const profileDescription = document.querySelector('.profile__description')
+	const descriptionInput = document.querySelector(
+		'.popup__input_type_description'
+	)
+	const nameInput = document.querySelector('.popup__input_type_name')
+
+	editButton.addEventListener('click', function () {
+		nameInput.value = profileName.textContent
+		descriptionInput.value = profileDescription.textContent
+		openPopup(editPopup)
+	})
+
+	addButton.addEventListener('click', function () {
+		openPopup(newCard)
+	})
+
+	closeButtons.forEach(function (button) {
+		button.addEventListener('click', function () {
+			const popup = button.closest('.popup')
 			closePopup(popup)
+		})
+	})
+
+	allPopups.forEach(function (popup) {
+		popup.addEventListener('click', function (event) {
+			if (event.target === popup) {
+				closePopup(popup)
+			}
+		})
+	})
+
+	document.addEventListener('keydown', function (event) {
+		if (event.key === 'Escape') {
+			const openedPopup = document.querySelector('.popup.popup_is-opened')
+			if (openedPopup) {
+				closePopup(openedPopup)
+			}
 		}
 	})
-})
+}
 
-document.addEventListener('keydown', function (event) {
-	if (event.key === 'Escape') {
-		var openedPopup = document.querySelector('.popup[style*="display: flex"]')
-		if (openedPopup) {
-			closePopup(openedPopup)
-		}
-	}
-})
+export { initPopups, openPopup, closePopup }

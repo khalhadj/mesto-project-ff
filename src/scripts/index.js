@@ -1,7 +1,10 @@
 import { initialCards } from './cards.js'
+import { initPopups, openPopup, closePopup } from './popup.js'
 import '../pages/index.css'
 
-function createCard(cardDetail, deleteCard) {
+// === СОЗДАНИЕ КАРТОЧКИ ===
+
+function createCard(cardDetail, deleteCard, handleLike) {
 	const cardTemplate = document.querySelector('#card-template').content
 	const cardElement = cardTemplate
 		.querySelector('.places__item')
@@ -9,70 +12,78 @@ function createCard(cardDetail, deleteCard) {
 	const cardImage = cardElement.querySelector('.card__image')
 	const cardTitle = cardElement.querySelector('.card__title')
 	const deleteButton = cardElement.querySelector('.card__delete-button')
+	const likeButton = cardElement.querySelector('.card__like-button')
 
 	cardImage.alt = cardDetail.name
 	cardImage.src = cardDetail.link
 	cardTitle.textContent = cardDetail.name
 
 	deleteButton.addEventListener('click', () => deleteCard(cardElement))
+	likeButton.addEventListener('click', () => handleLike(likeButton))
 	return cardElement
 }
+
+// УДАЛЕНИЕ КАРТОЧКИ
 
 function deleteCard(cardElement) {
 	cardElement.remove()
 }
 
+// LIKE КАРТОЧКИ
+
+function handleLike(button) {
+	button.classList.toggle('card__like-button_is-active')
+}
+
+// РЕНДЕР КАРТОЧЕК
+
 function renderCards() {
 	const placesList = document.querySelector('.places__list')
 
 	initialCards.forEach(cardDetail => {
-		const cardElement = createCard(cardDetail, deleteCard)
+		const cardElement = createCard(cardDetail, deleteCard, handleLike)
 		placesList.append(cardElement)
 	})
 }
 
 renderCards()
+initPopups()
 
-// Открываем попап
+// === ДОБАВЛЕНИЕ КАРТОЧКИ ЧЕРЕЗ + ===
 
-const allPopups = document.querySelectorAll('.popup')
-const editPopup = document.querySelector('.popup_type_edit')
-const editButton = document.querySelector('.profile__edit-button')
-const addButton = document.querySelector('.profile__add-button')
-const closeButton = document.querySelector('.popup__close')
+const formNewCard = document.querySelector('form[name="new-place"]')
+const inputTitle = formNewCard.querySelector('.popup__input_type_card-name')
+const inputLink = formNewCard.querySelector('.popup__input_type_url')
+const popupNewCard = document.querySelector('.popup_type_new-card')
+const cardContainer = document.querySelector('.places__list')
 
-editButton.addEventListener('click', function () {
-	editPopup.style.display = 'flex'
+formNewCard.addEventListener('submit', function (event) {
+	event.preventDefault()
+
+	const newCard = {
+		name: inputTitle.value,
+		link: inputLink.value,
+	}
+	const cardElement = createCard(newCard, deleteCard, handleLike)
+	cardContainer.prepend(cardElement)
+	formNewCard.reset()
+	closePopup(popupNewCard)
 })
 
-addButton.addEventListener('click', function () {
-	editPopup.style.display = 'flex'
-})
+// === РЕДАКТИРОВАНИЕ ПРОФИЛЯ ===
 
-// Закрываем попап
+const formEditProfile = document.querySelector('form[name="edit-profile"]')
+const nameInput = formEditProfile.querySelector('.popup__input_type_name')
+const jobInput = formEditProfile.querySelector('.popup__input_type_description')
+const profileName = document.querySelector('.profile__title')
+const profileDescription = document.querySelector('.profile__description')
+const popupEditProfile = document.querySelector('.popup_type_edit')
 
-function closePopup(popup) {
-	popup.style.display = 'none'
+function handleProfileFormSubmit(evt) {
+	evt.preventDefault()
+	profileName.textContent = nameInput.value
+	profileDescription.textContent = jobInput.value
+	closePopup(popupEditProfile)
 }
 
-closeButton.addEventListener('click', function () {
-	const popup = closeButton.closest('.popup')
-	closePopup(popup)
-})
-
-allPopups.forEach(function (popup) {
-	popup.addEventListener('click', function (event) {
-		if (event.target === popup) {
-			closePopup(popup)
-		}
-	})
-})
-
-document.addEventListener('keydown', function (event) {
-	if (event.key === 'Escape') {
-		var openedPopup = document.querySelector('.popup[style*="display: flex"]')
-		if (openedPopup) {
-			closePopup(openedPopup)
-		}
-	}
-})
+formEditProfile.addEventListener('submit', handleProfileFormSubmit)
