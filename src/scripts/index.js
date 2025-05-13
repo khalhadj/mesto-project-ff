@@ -4,7 +4,7 @@ import '../pages/index.css'
 
 // СОЗДАНИЕ КАРТОЧКИ
 
-function createCard(cardDetail, deleteCard, handleLike, imageOpen) {
+function createCard(cardDetail, deleteCard, toggleCardLike, imageOpen) {
 	const cardTemplate = document.querySelector('#card-template').content
 	const cardElement = cardTemplate
 		.querySelector('.places__item')
@@ -23,7 +23,7 @@ function createCard(cardDetail, deleteCard, handleLike, imageOpen) {
 	})
 
 	likeButton.addEventListener('click', function () {
-		handleLike(likeButton)
+		toggleCardLike(likeButton)
 	})
 
 	imageOpen(cardImage, cardDetail.name, cardDetail.link)
@@ -39,7 +39,7 @@ function deleteCard(cardElement) {
 
 // LIKE КАРТОЧКИ
 
-function handleLike(button) {
+function toggleCardLike(button) {
 	button.classList.toggle('card__like-button_is-active')
 }
 
@@ -52,7 +52,7 @@ function renderCards() {
 		const cardElement = createCard(
 			cardDetail,
 			deleteCard,
-			handleLike,
+			toggleCardLike,
 			imageOpen
 		)
 		placesList.append(cardElement)
@@ -77,19 +77,13 @@ formNewCard.addEventListener('submit', function (event) {
 		name: inputTitle.value,
 		link: inputLink.value,
 	}
-	const cardElement = createCard(newCard, deleteCard, handleLike, imageOpen)
+	const cardElement = createCard(newCard, deleteCard, toggleCardLike, imageOpen)
 	cardContainer.prepend(cardElement)
 	formNewCard.reset()
 	closePopup(popupNewCard)
 })
 
 // РАСКРЫТИЕ КАРТОЧКИ
-
-// const cardImage = formEditProfile.querySelector('.card__image')
-
-// function imageOpen() {
-// 	cardImage.addEventListener('click', function () {})
-// }
 
 function imageOpen(imageElement, name, link) {
 	const popupImage = document.querySelector('.popup_type_image')
@@ -107,16 +101,16 @@ function imageOpen(imageElement, name, link) {
 // РЕДАКТИРОВАНИЕ ПРОФИЛЯ
 
 const formEditProfile = document.querySelector('form[name="edit-profile"]')
-const nameInput = formEditProfile.querySelector('.popup__input_type_name')
-const jobInput = formEditProfile.querySelector('.popup__input_type_description')
+const inputName = formEditProfile.querySelector('.popup__input_type_name')
+const inputJob = formEditProfile.querySelector('.popup__input_type_description')
 const profileName = document.querySelector('.profile__title')
 const profileDescription = document.querySelector('.profile__description')
 const popupEditProfile = document.querySelector('.popup_type_edit')
 
 function handleProfileFormSubmit(evt) {
 	evt.preventDefault()
-	profileName.textContent = nameInput.value
-	profileDescription.textContent = jobInput.value
+	profileName.textContent = inputName.value
+	profileDescription.textContent = inputJob.value
 	closePopup(popupEditProfile)
 }
 
