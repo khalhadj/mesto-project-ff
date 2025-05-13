@@ -2,9 +2,9 @@ import { initialCards } from './cards.js'
 import { initPopups, openPopup, closePopup } from './popup.js'
 import '../pages/index.css'
 
-// === СОЗДАНИЕ КАРТОЧКИ ===
+// СОЗДАНИЕ КАРТОЧКИ
 
-function createCard(cardDetail, deleteCard, handleLike) {
+function createCard(cardDetail, deleteCard, handleLike, imageOpen) {
 	const cardTemplate = document.querySelector('#card-template').content
 	const cardElement = cardTemplate
 		.querySelector('.places__item')
@@ -18,8 +18,16 @@ function createCard(cardDetail, deleteCard, handleLike) {
 	cardImage.src = cardDetail.link
 	cardTitle.textContent = cardDetail.name
 
-	deleteButton.addEventListener('click', () => deleteCard(cardElement))
-	likeButton.addEventListener('click', () => handleLike(likeButton))
+	deleteButton.addEventListener('click', function () {
+		deleteCard(cardElement)
+	})
+
+	likeButton.addEventListener('click', function () {
+		handleLike(likeButton)
+	})
+
+	imageOpen(cardImage, cardDetail.name, cardDetail.link)
+
 	return cardElement
 }
 
@@ -40,8 +48,13 @@ function handleLike(button) {
 function renderCards() {
 	const placesList = document.querySelector('.places__list')
 
-	initialCards.forEach(cardDetail => {
-		const cardElement = createCard(cardDetail, deleteCard, handleLike)
+	initialCards.forEach(function (cardDetail) {
+		const cardElement = createCard(
+			cardDetail,
+			deleteCard,
+			handleLike,
+			imageOpen
+		)
 		placesList.append(cardElement)
 	})
 }
@@ -49,7 +62,7 @@ function renderCards() {
 renderCards()
 initPopups()
 
-// === ДОБАВЛЕНИЕ КАРТОЧКИ ЧЕРЕЗ + ===
+// ДОБАВЛЕНИЕ КАРТОЧКИ ЧЕРЕЗ +
 
 const formNewCard = document.querySelector('form[name="new-place"]')
 const inputTitle = formNewCard.querySelector('.popup__input_type_card-name')
@@ -64,13 +77,34 @@ formNewCard.addEventListener('submit', function (event) {
 		name: inputTitle.value,
 		link: inputLink.value,
 	}
-	const cardElement = createCard(newCard, deleteCard, handleLike)
+	const cardElement = createCard(newCard, deleteCard, handleLike, imageOpen)
 	cardContainer.prepend(cardElement)
 	formNewCard.reset()
 	closePopup(popupNewCard)
 })
 
-// === РЕДАКТИРОВАНИЕ ПРОФИЛЯ ===
+// РАСКРЫТИЕ КАРТОЧКИ
+
+// const cardImage = formEditProfile.querySelector('.card__image')
+
+// function imageOpen() {
+// 	cardImage.addEventListener('click', function () {})
+// }
+
+function imageOpen(imageElement, name, link) {
+	const popupImage = document.querySelector('.popup_type_image')
+	const popupImgElement = popupImage.querySelector('.popup__image')
+	const popupCaption = popupImage.querySelector('.popup__caption')
+
+	imageElement.addEventListener('click', function () {
+		popupImgElement.src = link
+		popupImgElement.alt = name
+		popupCaption.textContent = name
+		openPopup(popupImage)
+	})
+}
+
+// РЕДАКТИРОВАНИЕ ПРОФИЛЯ
 
 const formEditProfile = document.querySelector('form[name="edit-profile"]')
 const nameInput = formEditProfile.querySelector('.popup__input_type_name')

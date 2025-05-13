@@ -25,6 +25,4 @@ const initialCards = [
 	},
 ]
 
-function createCard() {}
-
 export { initialCards }
