@@ -41,7 +41,7 @@ function toggleCardLike(button) {
 
 // СОЗДАНИЕ КАРТОЧКИ
 
-function createCard(cardDetail) {
+function createCard(cardDetail, popupImage, popupImgElement, popupCaption) {
 	const cardTemplate = document.querySelector('#card-template').content
 	const cardElement = cardTemplate
 		.querySelector('.places__item')
@@ -64,21 +64,16 @@ function createCard(cardDetail) {
 	})
 
 	cardImage.addEventListener('click', function () {
-		openImagePopup(cardDetail.name, cardDetail.link)
+		openImagePopup(
+			cardDetail.name,
+			cardDetail.link,
+			popupImage,
+			popupImgElement,
+			popupCaption
+		)
 	})
 
 	return cardElement
 }
 
-//  ДОБАВЛЕНИЕ КАРТОЧЕК НА НАЧАЛЬНУЮ СТРАНИЦУ
-
-function renderCards() {
-	const placesList = document.querySelector('.places__list')
-
-	initialCards.forEach(function (cardDetail) {
-		const cardElement = createCard(cardDetail)
-		placesList.append(cardElement)
-	})
-}
-
-export { createCard, renderCards }
+export { createCard, initialCards }

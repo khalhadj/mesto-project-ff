@@ -1,6 +1,3 @@
-const popupImage = document.querySelector('.popup_type_image')
-const popupImgElement = popupImage.querySelector('.popup__image')
-const popupCaption = popupImage.querySelector('.popup__caption')
 let currentEscHandler = null
 
 function closeEsc(event) {
@@ -27,7 +24,7 @@ function closePopup(popup) {
 	}
 }
 
-function openImagePopup(name, link) {
+function openImagePopup(name, link, popupImage, popupImgElement, popupCaption) {
 	popupImgElement.src = link
 	popupImgElement.alt = name
 	popupCaption.textContent = name

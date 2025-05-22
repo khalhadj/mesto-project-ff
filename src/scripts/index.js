@@ -1,4 +1,4 @@
-import { createCard, renderCards } from './cards.js'
+import { createCard, initialCards } from './cards.js'
 import { openPopup, closePopup } from './modal.js'
 import '../pages/index.css'
 
@@ -23,10 +23,21 @@ const formEditProfile = document.querySelector('form[name="edit-profile"]')
 const inputName = formEditProfile.querySelector('.popup__input_type_name')
 const inputJob = formEditProfile.querySelector('.popup__input_type_description')
 const popupEditProfile = document.querySelector('.popup_type_edit')
+const popupImage = document.querySelector('.popup_type_image')
+const popupImgElement = popupImage.querySelector('.popup__image')
+const popupCaption = popupImage.querySelector('.popup__caption')
 
 // РЕНДЕР КАРТОЧЕК
 
-renderCards()
+initialCards.forEach(function (cardDetail) {
+	const cardElement = createCard(
+		cardDetail,
+		popupImage,
+		popupImgElement,
+		popupCaption
+	)
+	cardContainer.append(cardElement)
+})
 
 // ДОБАВЛЕНИЕ КАРТОЧКИ ЧЕРЕЗ +
 
@@ -35,7 +46,12 @@ formNewCard.addEventListener('submit', function (event) {
 		name: inputTitle.value,
 		link: inputLink.value,
 	}
-	const cardElement = createCard(newCard)
+	const cardElement = createCard(
+		newCard,
+		popupImage,
+		popupImgElement,
+		popupCaption
+	)
 	event.preventDefault()
 
 	cardContainer.prepend(cardElement)
@@ -77,15 +93,6 @@ allPopups.forEach(function (popup) {
 			closePopup(popup)
 		}
 	})
-})
-
-document.addEventListener('keydown', function (event) {
-	if (event.key === 'Escape') {
-		const openedPopup = document.querySelector('.popup.popup_is-opened')
-		if (openedPopup) {
-			closePopup(openedPopup)
-		}
-	}
 })
 
 formEditProfile.addEventListener('submit', handleProfileFormSubmit)
