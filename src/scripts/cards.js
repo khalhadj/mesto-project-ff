@@ -1,3 +1,5 @@
+import { openImagePopup } from './modal.js'
+
 const initialCards = [
 	{
 		name: 'Архыз',
@@ -25,4 +27,58 @@ const initialCards = [
 	},
 ]
 
-export { initialCards }
+// УДАЛЕНИЕ КАРТОЧКИ
+
+function deleteCard(cardElement) {
+	cardElement.remove()
+}
+
+// LIKE КАРТОЧКИ
+
+function toggleCardLike(button) {
+	button.classList.toggle('card__like-button_is-active')
+}
+
+// СОЗДАНИЕ КАРТОЧКИ
+
+function createCard(cardDetail) {
+	const cardTemplate = document.querySelector('#card-template').content
+	const cardElement = cardTemplate
+		.querySelector('.places__item')
+		.cloneNode(true)
+	const cardImage = cardElement.querySelector('.card__image')
+	const cardTitle = cardElement.querySelector('.card__title')
+	const deleteButton = cardElement.querySelector('.card__delete-button')
+	const likeButton = cardElement.querySelector('.card__like-button')
+
+	cardImage.alt = cardDetail.name
+	cardImage.src = cardDetail.link
+	cardTitle.textContent = cardDetail.name
+
+	deleteButton.addEventListener('click', function () {
+		deleteCard(cardElement)
+	})
+
+	likeButton.addEventListener('click', function () {
+		toggleCardLike(likeButton)
+	})
+
+	cardImage.addEventListener('click', function () {
+		openImagePopup(cardDetail.name, cardDetail.link)
+	})
+
+	return cardElement
+}
+
+//  ДОБАВЛЕНИЕ КАРТОЧЕК НА НАЧАЛЬНУЮ СТРАНИЦУ
+
+function renderCards() {
+	const placesList = document.querySelector('.places__list')
+
+	initialCards.forEach(function (cardDetail) {
+		const cardElement = createCard(cardDetail)
+		placesList.append(cardElement)
+	})
+}
+
+export { createCard, renderCards }
