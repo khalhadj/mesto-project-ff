@@ -68,6 +68,16 @@ function handleProfileFormSubmit(evt) {
 	closePopup(popupEditProfile)
 }
 
+// ОТКРЫТИЕ ПОПАП С КАРТИНКОЙ
+
+function openImagePopup(name, link, popupImage, popupImgElement, popupCaption) {
+	popupImgElement.src = link
+	popupImgElement.alt = name
+	popupCaption.textContent = name
+
+	openPopup(popupImage)
+}
+
 // СЛУШАТЕЛИ
 
 editButton.addEventListener('click', function () {
@@ -96,3 +106,5 @@ allPopups.forEach(function (popup) {
 })
 
 formEditProfile.addEventListener('submit', handleProfileFormSubmit)
+
+export { openImagePopup }

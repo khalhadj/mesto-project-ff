@@ -1,5 +1,3 @@
-let currentEscHandler = null
-
 function closeEsc(event) {
 	if (event.key === 'Escape') {
 		const openedPopup = document.querySelector('.popup_is-opened')
@@ -11,25 +9,12 @@ function closeEsc(event) {
 
 function openPopup(popup) {
 	popup.classList.add('popup_is-opened')
-	currentEscHandler = closeEsc
-	document.addEventListener('keydown', currentEscHandler)
+	document.addEventListener('keydown', closeEsc)
 }
 
 function closePopup(popup) {
 	popup.classList.remove('popup_is-opened')
-
-	if (currentEscHandler) {
-		document.removeEventListener('keydown', currentEscHandler)
-		currentEscHandler = null
-	}
+	document.removeEventListener('keydown', closeEsc)
 }
 
-function openImagePopup(name, link, popupImage, popupImgElement, popupCaption) {
-	popupImgElement.src = link
-	popupImgElement.alt = name
-	popupCaption.textContent = name
-
-	openPopup(popupImage)
-}
-
-export { openPopup, closePopup, openImagePopup }
+export { openPopup, closePopup }
