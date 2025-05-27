@@ -41,11 +41,12 @@ function toggleCardLike(button) {
 
 // СОЗДАНИЕ КАРТОЧКИ
 
-function createCard(cardDetail, popupImage, popupImgElement, popupCaption) {
+function createCard(cardDetail, openImagePopup) {
 	const cardTemplate = document.querySelector('#card-template').content
 	const cardElement = cardTemplate
 		.querySelector('.places__item')
 		.cloneNode(true)
+
 	const cardImage = cardElement.querySelector('.card__image')
 	const cardTitle = cardElement.querySelector('.card__title')
 	const deleteButton = cardElement.querySelector('.card__delete-button')
@@ -64,13 +65,7 @@ function createCard(cardDetail, popupImage, popupImgElement, popupCaption) {
 	})
 
 	cardImage.addEventListener('click', function () {
-		openImagePopup(
-			cardDetail.name,
-			cardDetail.link,
-			popupImage,
-			popupImgElement,
-			popupCaption
-		)
+		openImagePopup(cardDetail)
 	})
 
 	return cardElement

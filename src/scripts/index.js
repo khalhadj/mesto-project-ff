@@ -10,10 +10,6 @@ const newCardPopup = document.querySelector('.popup_type_new-card')
 const closeButtons = document.querySelectorAll('.popup__close')
 const profileName = document.querySelector('.profile__title')
 const profileDescription = document.querySelector('.profile__description')
-const descriptionInput = document.querySelector(
-	'.popup__input_type_description'
-)
-const nameInput = document.querySelector('.popup__input_type_name')
 const formNewCard = document.querySelector('form[name="new-place"]')
 const inputTitle = formNewCard.querySelector('.popup__input_type_card-name')
 const inputLink = formNewCard.querySelector('.popup__input_type_url')
@@ -27,33 +23,33 @@ const popupImage = document.querySelector('.popup_type_image')
 const popupImgElement = popupImage.querySelector('.popup__image')
 const popupCaption = popupImage.querySelector('.popup__caption')
 
+// ОТКРЫТИЕ ПОПАП С КАРТИНКОЙ
+
+function openImagePopup({ name, link }) {
+	popupImgElement.src = link
+	popupImgElement.alt = name
+	popupCaption.textContent = name
+	openPopup(popupImage)
+}
+
 // РЕНДЕР КАРТОЧЕК
 
 initialCards.forEach(function (cardDetail) {
-	const cardElement = createCard(
-		cardDetail,
-		popupImage,
-		popupImgElement,
-		popupCaption
-	)
+	const cardElement = createCard(cardDetail, openImagePopup)
 	cardContainer.append(cardElement)
 })
 
 // ДОБАВЛЕНИЕ КАРТОЧКИ ЧЕРЕЗ +
 
 formNewCard.addEventListener('submit', function (event) {
+	event.preventDefault()
+
 	const newCard = {
 		name: inputTitle.value,
 		link: inputLink.value,
 	}
-	const cardElement = createCard(
-		newCard,
-		popupImage,
-		popupImgElement,
-		popupCaption
-	)
-	event.preventDefault()
 
+	const cardElement = createCard(newCard, openImagePopup)
 	cardContainer.prepend(cardElement)
 	formNewCard.reset()
 	closePopup(popupNewCard)
@@ -68,21 +64,11 @@ function handleProfileFormSubmit(evt) {
 	closePopup(popupEditProfile)
 }
 
-// ОТКРЫТИЕ ПОПАП С КАРТИНКОЙ
-
-function openImagePopup(name, link, popupImage, popupImgElement, popupCaption) {
-	popupImgElement.src = link
-	popupImgElement.alt = name
-	popupCaption.textContent = name
-
-	openPopup(popupImage)
-}
-
 // СЛУШАТЕЛИ
 
 editButton.addEventListener('click', function () {
-	nameInput.value = profileName.textContent
-	descriptionInput.value = profileDescription.textContent
+	inputName.value = profileName.textContent
+	inputJob.value = profileDescription.textContent
 	openPopup(editPopup)
 })
 
@@ -106,5 +92,3 @@ allPopups.forEach(function (popup) {
 })
 
 formEditProfile.addEventListener('submit', handleProfileFormSubmit)
-
-export { openImagePopup }
